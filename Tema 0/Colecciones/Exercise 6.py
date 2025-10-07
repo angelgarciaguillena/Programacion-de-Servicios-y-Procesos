@@ -7,4 +7,7 @@ string_splited = string.split(" ")
 for i in range(0, len(string)):
 
     if dictionary.__contains__string_splited[i]:
-        dictionary = string_splited
+        
+        dictionary.update(string_splited = 1)
+        
+    
