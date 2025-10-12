@@ -1,4 +1,8 @@
+"""Clase encargada de representar una Cuenta Corriente y sus funciones basicas"""
 class CuentaCorriente:
+
+    """Constructor que inicializa el dni y el saldo la clase Cuenta Corriente comprobando
+    que los valores son validos antes de asignarlos"""
     def __init__(self, dni, balance):
 
         if dni is not None and dni != "" and len(dni) == 9:
@@ -7,6 +11,8 @@ class CuentaCorriente:
         if balance is not None and balance >= 0:
             self.balance = balance
     
+    """Constructor que inicializa los atributos de la clase Cuenta Corriente comprobando
+    que los valores son validos antes de asignarlos"""
     def __init__(self, dni, name, balance):
         
         if dni is not None and dni != "" and len(dni) == 9:
@@ -18,6 +24,9 @@ class CuentaCorriente:
         if balance is not None and balance >= 0:
             self.balance = balance
 
+    """Funcion encargada de sacar dinero en la cuenta del usuario mientras
+    que haya saldo en la cuenta y devuelve true si la operacion es correcta 
+    o false si la operacion no se ha podido realizar"""
     def withdraw_money(self, money):
 
         correct = False
@@ -28,6 +37,9 @@ class CuentaCorriente:
 
         return correct
     
+    """Funcion encargada de depositar dinero enla cuenta del usuario mientras
+    que el saldo introducido por el usuario sea mayor a 0 y devuelve true si 
+    la operacion es correcta o false si la operacion no se ha podido realizar"""
     def deposit_money(self, money):
 
         correct = False
@@ -38,6 +50,7 @@ class CuentaCorriente:
 
         return correct
 
+    """Funcion encargada de devolver los datos de la cuenta corriente"""
     def __str__(self):
 
         string = "DNI: " + self.dni + "\n"
@@ -46,6 +59,8 @@ class CuentaCorriente:
 
         return string
     
+    """Funcion encargada de comprobar si dos cuentas corrientes son iguales segun
+    su dni y devuelve true si son iguales o false si no son iguales"""
     def __eq__(self, object):
 
         equals = False
@@ -55,6 +70,8 @@ class CuentaCorriente:
 
         return equals
     
+    """Funcion encargada de ordenar las cuentas corrientes de menor a mayor
+    segun su saldo"""
     def __lt__(self, object):
         
         minor = False
@@ -63,26 +80,3 @@ class CuentaCorriente:
             minor = True
 
         return minor
-    
-
-if __name__ == "__main__":
-
-    account = CuentaCorriente("12345678A", "Angel", 120)
-    account2 = CuentaCorriente("87654321A", "Angel", 120)
-
-    correct = account.withdraw_money(200)
-    string = account.__str__()
-
-    print(correct)
-    print("\n" + "Account:")
-    print(string)
-
-    correct = account.deposit_money(-4)
-    string = account.__str__()
-
-    print(correct)
-    print("\n" + "Account:")
-    print(string)
-
-    equals = account.__eq__(account2)
-    print(equals)
