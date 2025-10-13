@@ -13,7 +13,7 @@ for line in f.readlines():
 #Ordenamos los numeros
 integers.sort()
 
-#Abrimos el fichero de lescritura
+#Abrimos el fichero de escritura
 f2 = open('C:\\Users\\Usuario\\Documents\\Programacion-de-Servicios-y-Procesos\\Tema 0\\Files\\Exercise4\\numeros_ordenados.txt', 'a')
 
 #Creamos un bucle for para recorrer la lista de numeros y escribirlos en el fichero
