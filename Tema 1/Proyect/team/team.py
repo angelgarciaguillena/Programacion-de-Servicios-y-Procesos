@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 #Crear la aplicacion FastAPI
@@ -26,6 +26,9 @@ team_list = [
     Team(id=10, name="Celta de Vigo", city="Vigo", year_founded=1923, stadium="Balaídos"),
 ]
 
+def next_id():
+    return (max(team_list, key = id).id+1)
+
 #Metodo get para obtener todos los equipos
 @app.get("/teams")   
 def teams():
@@ -33,7 +36,7 @@ def teams():
 
 
 #Metodo get para obtener el equipo por su ID
-@app.get("/teams/id/{id_team}")
+@app.get("/teams/{id_team}")
 def get_team_by_id(id_team: int):
     
     teams = [team for team in team_list if team.id == id_team]
@@ -90,3 +93,72 @@ def get_teams_by_stadium(stadium_name: str):
         return teams
     else:
         return {"error": "Teams not found by stadium name"}
+
+#Metodo post para añadir un nuevo equipo
+@app.post("/teams", status_code = 201, response_model = Team)
+def add_team(team : Team):
+
+    team.id = next_id()
+
+    team_list.append(team)
+
+    return team
+
+@app.put("/teams/{id_team}", response_model = Team)
+def modify_team_id(id: int, team: Team):
+    for index, saved_team in enumerate(team_list):
+        if saved_team.id == id:
+            team.id = id
+            team_list[index] = team
+            return team
+        
+    raise HTTPException(status_code = 404, detail = "Team not found")
+
+@app.put ("/teams/name/{team_name}", response_model = Team)
+def modify_team_name(id: int, name: str, team = Team):
+    for index, saved_team in enumerate(team_list):
+        if saved_team.id == id:
+            team.name = name
+            team_list[index] = team
+            return team
+        
+    raise HTTPException(status_code = 404, detail = "Team not found")
+
+@app.put ("/teams/city/{city_name}", response_model = Team)
+def modify_team_city(id: int, city: str, team = Team):
+    for index, saved_team in enumerate(team_list):
+        if saved_team.id == id:
+            team.city = city
+            team_list[index] = team
+            return team
+        
+    raise HTTPException(status_code = 404, detail = "Team not found")
+
+@app.put ("/teams/year/{year_founded}", response_model = Team)
+def modify_team_year(id: int, year_founded: int, team = Team):
+    for index, saved_team in enumerate(team_list):
+        if saved_team.id == id:
+            team.year_founded == year_founded
+            team_list[index] = team
+            return team
+        
+    raise HTTPException(status_code = 404, detail = "Team not found")
+
+@app.put ("/teams/stadium/{stadium_name}", response_model = Team)
+def modify_team_stadium(id: int, stadium: str, team = Team):
+    for index, saved_team in enumerate(team_list):
+        if saved_team.id == id:
+            team.stadium == stadium
+            team_list[index] = team
+            return team
+    
+    raise HTTPException(status_code = 404, detail = "Team not found")
+
+@app.delete("teams/{id_team}")
+def delete_team(id: int):
+    for saved_team in team_list:
+        if saved_team.id == id:
+            team_list.remove(saved_team)
+            return {}
+        
+    raise HTTPException(status_code = 404, detail = "Team not found")
