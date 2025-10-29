@@ -1,8 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 #Crear la aplicacion FastAPI
-app = FastAPI()
+router = APIRouter(prefix="/teams", tags=["teams"])
 
 #Clase Equipo
 class Team(BaseModel):
@@ -35,13 +35,13 @@ def next_id():
 
 #region Metodos get
 #Metodo get para obtener todos los equipos
-@app.get("/teams")   
+@router.get("/")   
 def teams():
     return team_list
 
 
 #Metodo get para obtener el equipo por su ID
-@app.get("/teams/{id_team}")
+@router.get("/{id_team}")
 def get_team_by_id(id_team: int):
 
     #Buscamos el equipo por su ID y lo almacenamos en una lista
@@ -57,7 +57,7 @@ def get_team_by_id(id_team: int):
 
 
 #Metodo get para obtener los equipos por su nombre
-@app.get("/teams/name/{team_name}")
+@router.get("/name/{team_name}")
 def get_team_by_name(team_name: str):
 
     #Buscamos los equipos por su nombre y los almacenamos en una lista
@@ -73,7 +73,7 @@ def get_team_by_name(team_name: str):
 
 
 #Metodo get para obtener los equipos por su ciudad
-@app.get("/teams/city/{city_name}")
+@router.get("/city/{city_name}")
 def get_teams_by_city(city_name: str):
 
     #Buscamos los equipos por su ciudad y los almacenamos en una lista
@@ -89,7 +89,7 @@ def get_teams_by_city(city_name: str):
 
 
 #Metodo get para obtener los equipos por su año de fundacion
-@app.get("/teams/year/{year_founded}")
+@router.get("/year/{year_founded}")
 def get_teams_by_year(year_founded: int):
 
     #Buscamos los equipos por su año de fundacion y los almacenamos en una lista
@@ -105,7 +105,7 @@ def get_teams_by_year(year_founded: int):
 
 
 #Metodo get para obtener los equipos por su estadio
-@app.get("/teams/stadium/{stadium_name}")
+@router.get("/stadium/{stadium_name}")
 def get_teams_by_stadium(stadium_name: str):
 
     #Buscamos los equipos por su estadio y los almacenamos en una lista
@@ -122,7 +122,7 @@ def get_teams_by_stadium(stadium_name: str):
 
 #region Metodos post
 #Metodo post para añadir un nuevo equipo
-@app.post("/teams", status_code = 201, response_model = Team)
+@router.post("/", status_code = 201, response_model = Team)
 def add_team(team : Team):
 
     #Llamamos a la funcion para asignar un ID al nuevo equipo
@@ -137,7 +137,7 @@ def add_team(team : Team):
 
 #region Metodos put
 #Metodo put para modificar un equipo existente
-@app.put("/teams/{id_team}", response_model = Team)
+@router.put("/{id_team}", response_model = Team)
 def modify_team(id_team: int, team: Team):
 
     #Creamos un bucle for para recorrer la lista de equipos
@@ -161,7 +161,7 @@ def modify_team(id_team: int, team: Team):
 
 #region Metodos delete
 #Metodo delete para eliminar un equipo existente
-@app.delete("/teams/{id_team}")
+@router.delete("/{id_team}")
 def delete_team(id_team: int):
 
     #Creamos un bucle for para recorrer la lista de equipos

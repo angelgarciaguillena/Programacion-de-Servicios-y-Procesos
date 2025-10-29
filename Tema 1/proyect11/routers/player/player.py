@@ -1,8 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 #Creamos una apicacion FastAPI  
-app = FastAPI()
+router = APIRouter(prefix="/players", tags=["players"])
 
 #Creamos la clase Jugador
 class Player(BaseModel):
@@ -35,13 +35,13 @@ def next_id():
 
 #region Metodos get
 #Metodo get para obtener todos los jugadores
-@app.get("/players")
+@router.get("/")
 def get_players():
     return player_list
 
 
 #Metodo get para obtener el jugador por su id
-@app.get("/players/{id_player}")
+@router.get("/{id_player}")
 def get_player_by_id(id_player: int):
 
     #Buscamos el jugador por su ID y lo almacenamos en una lista
@@ -57,7 +57,7 @@ def get_player_by_id(id_player: int):
 
 
 #Metodo get para obtener los jugadores por su nombre
-@app.get("/players/name/{player_name}")
+@router.get("/name/{player_name}")
 def get_player_by_name(player_name: str):
 
     #Buscamos los jugadores por su nombre y los almacenamos en una lista
@@ -73,7 +73,7 @@ def get_player_by_name(player_name: str):
 
 
 #Metodo get para obtener los jugadores por su edad
-@app.get("/players/age/{player_age}")
+@router.get("/age/{player_age}")
 def get_player_by_age(player_age: int):
 
     #Buscamos los jugadores por su edad y los almacenamos en una lista
@@ -89,7 +89,7 @@ def get_player_by_age(player_age: int):
 
 
 #Metodo get para obtener los jugadores por su posicion
-@app.get("/players/position/{player_position}")
+@router.get("/position/{player_position}")
 def get_player_by_position(player_position: str):
 
     #Buscamos los jugadores por su posicion y los almacenamos en una lista
@@ -105,7 +105,7 @@ def get_player_by_position(player_position: str):
 
 
 #Metodo get para obtener los jugadores por su nacionalidad
-@app.get("/players/nationality/{player_nationality}")
+@router.get("/nationality/{player_nationality}")
 def get_player_by_nationality(player_nationality: str):
 
     #Buscamos los jugadores por su nacionalidad y los almacenamos en una lista
@@ -121,7 +121,7 @@ def get_player_by_nationality(player_nationality: str):
 
 
 #Metodo get para obtener los jugadores por su salario 
-@app.get("/players/salary/{player_salary}")
+@router.get("/salary/{player_salary}")
 def get_player_by_salary(player_salary: float):
 
     #Buscamos los jugadores por su salario y los almacenamos en una lista
@@ -137,7 +137,7 @@ def get_player_by_salary(player_salary: float):
 
 
 #Metodo get para obtener los jugadores por su ID de equipo 
-@app.get("/players/id_team/{id_team}")
+@router.get("/id_team/{id_team}")
 def get_player_by_team(id_team: int):
 
     #Buscamos los jugadores por su ID de equipo y los almacenamos en una lista
@@ -155,14 +155,14 @@ def get_player_by_team(id_team: int):
 
 #region Metodos post
 #Metodo post para añadir un nuevo jugador
-@app.post("/players")
+@router.post("/", status_code=201)
 def add_player(player: Player):
 
     #LLamamos a la funcion para asignar un ID al nuevo jugador 
     player.id = next_id()
 
     #Añadimos el nuevo jugador a la lista de jugadores
-    player_list.append(player)
+    player_list.routerend(player)
 
     #Devolvemos el jugador que se ha añadido
     return player
@@ -171,7 +171,7 @@ def add_player(player: Player):
 
 #region Metodos put
 #Metodo put para modificar un jugador existente
-@app.put("/players/{id_player}", response_model = Player)
+@router.put("/{id_player}", response_model = Player)
 def modify_player(id_player: int, player: Player):
 
     #Creamos un bucle for para recorrer la lista de jugadores
@@ -196,7 +196,7 @@ def modify_player(id_player: int, player: Player):
 
 #region Metodos delete
 #Metodo delete para eliminar un jugador existente
-@app.delete("/players/{id_player}")
+@router.delete("/{id_player}")
 def delete_player(id_player: int):
 
     #Creamos un bucle for para recorrer la lista de jugadores
