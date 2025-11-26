@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
+from routers import auth_users
 
 #Crear la aplicacion FastAPI
 router = APIRouter(prefix="/teams", tags=["teams"])
@@ -123,7 +124,7 @@ def get_teams_by_stadium(stadium_name: str):
 #region Metodos post
 #Metodo post para añadir un nuevo equipo
 @router.post("/", status_code = 201, response_model = Team)
-def add_team(team : Team):
+def add_team(team : Team, authorized = Depends(auth_users)):
 
     #Llamamos a la funcion para asignar un ID al nuevo equipo
     team.id = next_id()
