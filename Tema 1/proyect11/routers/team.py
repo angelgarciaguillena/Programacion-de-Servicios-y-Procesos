@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from routers import auth_users
 
 #Crear la aplicacion FastAPI
 router = APIRouter(prefix="/teams", tags=["teams"])
@@ -34,6 +33,11 @@ def next_id():
     return (max(team_list, key = id).id+1)
 
 
+def search_team(id: int):
+    #teams = filter(lambda team: team.id==id, team_list)
+    return [team for team in team_list if team.id == id]
+
+
 #region Metodos get
 #Metodo get para obtener todos los equipos
 @router.get("/")   
@@ -46,86 +50,23 @@ def teams():
 def get_team_by_id(id_team: int):
 
     #Buscamos el equipo por su ID y lo almacenamos en una lista
-    teams = [team for team in team_list if team.id == id_team]
+    teams = search_team(id_team)
 
     #Si encontramos al equipo lo devolvemos
-    if teams:
+    if len(teams) != 0:
         return teams[0]
     
     #Si no encontramos al equipo devolvemos un mensaje de error
     else:
-        return {"error": "Team not found by ID"}
-
-
-#Metodo get para obtener los equipos por su nombre
-@router.get("/name/{team_name}")
-def get_team_by_name(team_name: str):
-
-    #Buscamos los equipos por su nombre y los almacenamos en una lista
-    teams = [team for team in team_list if team.name.lower() == team_name.lower()]
-
-    #Si encontramos los equipos los devolvemos
-    if teams:
-        return teams
-
-    #Si no encontramos los equipos devolvemos un mensaje de error
-    else:
-        return {"error": "Teams not found by name"}
-
-
-#Metodo get para obtener los equipos por su ciudad
-@router.get("/city/{city_name}")
-def get_teams_by_city(city_name: str):
-
-    #Buscamos los equipos por su ciudad y los almacenamos en una lista
-    teams = [team for team in team_list if team.city.lower() == city_name.lower()]
-
-    #Si encontramos los equipos los devolvemos
-    if teams:
-        return teams
-    
-    #Si no encontramos los equipos devolvemos un mensaje de error
-    else:
-        return {"error": "Teams not found by city name"}
-
-
-#Metodo get para obtener los equipos por su año de fundacion
-@router.get("/year/{year_founded}")
-def get_teams_by_year(year_founded: int):
-
-    #Buscamos los equipos por su año de fundacion y los almacenamos en una lista
-    teams = [team for team in team_list if team.year_founded == year_founded]
-
-    #Si encontramos los equipos los devolvemos
-    if teams:
-        return teams
-    
-    #Si no encontramos los equipos devolvemos un mensaje de error
-    else:
-        return {"error": "Teams not found by year of foundation"}
-
-
-#Metodo get para obtener los equipos por su estadio
-@router.get("/stadium/{stadium_name}")
-def get_teams_by_stadium(stadium_name: str):
-
-    #Buscamos los equipos por su estadio y los almacenamos en una lista
-    teams = [team for team in team_list if team.stadium.lower() == stadium_name.lower()]
-
-    #Si encontramos los equipos los devolvemos
-    if teams:
-        return teams
-    
-    #Si no encontramos los equipos devolvemos un mensaje de error
-    else:
-        return {"error": "Teams not found by stadium name"}
+        raise HTTPException(status_code=404, detail="Team not found")
 #endregion
+
 
 #region Metodos post
 #Metodo post para añadir un nuevo equipo
 @router.post("/", status_code = 201, response_model = Team)
-def add_team(team : Team, authorized = Depends(auth_users)):
-
+def add_team(team : Team):
+    
     #Llamamos a la funcion para asignar un ID al nuevo equipo
     team.id = next_id()
 

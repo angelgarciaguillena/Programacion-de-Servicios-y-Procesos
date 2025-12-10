@@ -33,6 +33,12 @@ player_list = [
 def next_id():
     return max(player_list, key = id).id + 1
 
+
+def search_player(id: int):
+    #players = filter(lambda player: player.id==id, player_list)
+    return [player for player in player_list if player.id == id]
+
+
 #region Metodos get
 #Metodo get para obtener todos los jugadores
 @router.get("/")
@@ -45,111 +51,15 @@ def get_players():
 def get_player_by_id(id_player: int):
 
     #Buscamos el jugador por su ID y lo almacenamos en una lista
-    players = [player for player in player_list if player.id == id_player]
+    players = search_player(id_player)
 
     #Si encontramos al jugadorlo devolvemos
-    if players:
+    if len(players) != 0:
         return players[0]
 
     #Si no encontramos al jugador devolvemos un mensaje de error
     else:
-        return {"error": "Player not found by ID"}
-
-
-#Metodo get para obtener los jugadores por su nombre
-@router.get("/name/{player_name}")
-def get_player_by_name(player_name: str):
-
-    #Buscamos los jugadores por su nombre y los almacenamos en una lista
-    players = [player for player in player_list if player.name.lower() == player_name.lower()] 
-
-    #Si encontramos a los jugadores los devolvemos
-    if players:
-        return players
-    
-    #Si no encontramos al jugador devolvemos un mensaje de error
-    else:
-        return {"error": "Players not found by name"}
-
-
-#Metodo get para obtener los jugadores por su edad
-@router.get("/age/{player_age}")
-def get_player_by_age(player_age: int):
-
-    #Buscamos los jugadores por su edad y los almacenamos en una lista
-    players = [player for player in player_list if player.age == player_age]
-
-    #Si encontramos a los jugadores los devolvemos
-    if players:
-        return players
-    
-    #Si no encontramos al jugador devolvemos un mensaje de error
-    else:
-        return {"error": "Players not found by age"}
-
-
-#Metodo get para obtener los jugadores por su posicion
-@router.get("/position/{player_position}")
-def get_player_by_position(player_position: str):
-
-    #Buscamos los jugadores por su posicion y los almacenamos en una lista
-    players = [player for player in player_list if player.position.lower() == player_position.lower()]   
-
-    #Si encontramos a los jugadores los devolvemos
-    if players:
-        return players
-    
-    #Si no encontramos al jugador devolvemos un mensaje de error
-    else:
-        return {"error": "Players not found by position"}
-
-
-#Metodo get para obtener los jugadores por su nacionalidad
-@router.get("/nationality/{player_nationality}")
-def get_player_by_nationality(player_nationality: str):
-
-    #Buscamos los jugadores por su nacionalidad y los almacenamos en una lista
-    players = [player for player in player_list if player.nationality.lower() == player_nationality.lower()]
-
-    #Si encontramos a los jugadores los devolvemos
-    if players:
-        return players
-    
-    #Si no encontramos al jugador devolvemos un mensaje de error
-    else:
-        return {"error": "Players not found by nationality"}
-
-
-#Metodo get para obtener los jugadores por su salario 
-@router.get("/salary/{player_salary}")
-def get_player_by_salary(player_salary: float):
-
-    #Buscamos los jugadores por su salario y los almacenamos en una lista
-    players = [player for player in player_list if player.salary == player_salary]
-
-    #Si encontramos a los jugadores los devolvemos
-    if players:
-        return players
-    
-    #Si no encontramos al jugador devolvemos un mensaje de error
-    else:
-        return {"error": "Players not found by salary"}
-
-
-#Metodo get para obtener los jugadores por su ID de equipo 
-@router.get("/id_team/{id_team}")
-def get_player_by_team(id_team: int):
-
-    #Buscamos los jugadores por su ID de equipo y los almacenamos en una lista
-    players = [player for player in player_list if player.id_team == id_team]
-
-    #Si encontramos a los jugadores los devolvemos
-    if players:
-        return players
-    
-    #Si no encontramos al jugador devolvemos un mensaje de error
-    else:
-        return {"error": "Players not found by team ID"}
+        raise HTTPException(status_code=404, detail="Player not found")
 #endregion
 
 

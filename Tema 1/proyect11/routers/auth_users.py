@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 import jwt
-from jwt import PyJWTError
-from jwt.exceptions import InvalidTokenError
+from jwt.exceptions import PyJWTError
 from pwdlib import PasswordHash
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
 
 #Clave de cifrado para el token
 SECRET_KEY = "588d08f37f3c51a11a363d767d4ac9ebd4fc1b11b0c784e701d760ceb27e52d9"
