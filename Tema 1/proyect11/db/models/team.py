@@ -8,4 +8,3 @@ class Team(BaseModel):
     city: str #Ciudad del equipo
     year_founded: int #Año de fundacion del equipo
     stadium: str #Estadio del equipo   
-    
