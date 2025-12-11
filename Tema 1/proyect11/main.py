@@ -4,6 +4,7 @@ from routers import player, team, team_db, player_db, auth_users
 
 app = FastAPI()
 
+# Routers
 app.include_router(team.router)
 app.include_router(player.router)
 app.include_router(auth_users.router)

@@ -1,4 +1,5 @@
 def team_schema(team) -> dict:
+    # El id en base de datos es _id
     return {"id": str(team["_id"]),
             "name": team["name"],
             "city": team["city"],

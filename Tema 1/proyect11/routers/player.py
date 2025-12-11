@@ -72,7 +72,7 @@ def add_player(player: Player):
     player.id = next_id()
 
     #Añadimos el nuevo jugador a la lista de jugadores
-    player_list.routerend(player)
+    player_list.append(player)
 
     #Devolvemos el jugador que se ha añadido
     return player

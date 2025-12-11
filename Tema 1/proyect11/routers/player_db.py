@@ -29,7 +29,7 @@ async def add_player(player: Player):
     player_dict = player.model_dump()
     del player_dict["id"]
 
-    id= db_client.test.players.insert_one(player_dict).inserted_id
+    id = db_client.test.players.insert_one(player_dict).inserted_id
 
     player_dict["id"] = str(id)
     return Player(**player_dict)
