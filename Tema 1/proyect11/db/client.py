@@ -8,4 +8,4 @@ from pymongo import MongoClient
 # que indicar los datos de conexión
 
 # Base de datos en local
-db_client = MongoClient()
+db_client = MongoClient("mongodb+srv://angelgarcia_db_user:<1234>@cluster0.segunh9.mongodb.net/?appName=Cluster0")
