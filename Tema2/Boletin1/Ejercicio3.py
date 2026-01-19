@@ -1,14 +1,14 @@
-from multiprocessing import Process, Pipe
+from multiprocessing import Process, Queue
 import os
 import time
 
-def sumarNumeros(conexion):
+def sumarNumeros(numeros):
     
     total = 0
 
     while True:
 
-        numero = conexion.recv()
+        numero = numeros.get()
 
         if numero is None:
             break
@@ -17,36 +17,34 @@ def sumarNumeros(conexion):
 
         print(f"Sumando {numero}, el total es {total}")
 
-    conexion.close()    
 
-
-def leerNumeros(fichero, conexion):
+def leerNumeros(fichero, numeros):
 
     f = open(fichero, 'rt', encoding="utf8")
 
     for numero in f.readlines():
-        conexion.send(int(numero))
+        numeros.put(int(numero))
 
     f.close()
-    conexion.send(None)
-    conexion.close()
 
 
 if __name__ == "__main__":
 
     inicio = time.time()
 
-    fichero = 'C:\\Users\\Usuario\\Documents\\Programacion-de-Servicios-y-Procesos\\Tema2\\numeros.txt'
+    fichero = 'C:\\Users\\Usuario\\Documents\\Programacion-de-Servicios-y-Procesos\\Tema2\\Boletin1\\numeros.txt'
 
-    left, right = Pipe()
+    queue = Queue()
 
-    p1 = Process(target = leerNumeros, args = (fichero, right))
-    p2 = Process(target = sumarNumeros, args = (left,))
+    p1 = Process(target = leerNumeros, args = (fichero, queue))
+    p2 = Process(target = sumarNumeros, args = (queue,))
 
     p1.start()
     p2.start()
 
     p1.join()
+    queue.put(None)
+
     p2.join()
     
     print("Todos los procesos han terminado")

@@ -18,7 +18,6 @@ if __name__ == "__main__":
     inicio = time.time()
 
     valores = [10, 20, 30, 40] 
-    procesos = []
 
     with Pool(processes = len(valores)) as pool:
         resultados = pool.map(sumarNumeros, valores)

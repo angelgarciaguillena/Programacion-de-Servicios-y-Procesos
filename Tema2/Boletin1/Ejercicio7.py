@@ -2,28 +2,35 @@ from multiprocessing import Process, Queue
 import os
 import time
 
-def sumarNumeros(numeros):
+def sumarNumeros(cola):
     
-    total = 0
-
     while True:
 
-        numero = numeros.get()
+        total = 0
 
-        if numero is None:
+        numeros = cola.get()
+        
+        if numeros is None:
             break
 
-        total = total + numero
+        numero1, numero2 = numeros
 
-        print(f"Sumando {numero}, el total es {total}")
+        inicio = min(numero1, numero2)
+        final = max(numero1, numero2)
+
+        for i in range (inicio, final + 1):
+            total = total + i
+
+        print(f"La suma de {inicio} a {final} es {total}")
 
 
 def leerNumeros(fichero, numeros):
 
     f = open(fichero, 'rt', encoding="utf8")
 
-    for numero in f.readlines():
-        numeros.put(int(numero))
+    for linea in f.readlines():
+        numero1, numero2 = linea.split()
+        numeros.put((int(numero1), int(numero2)))
 
     f.close()
 
@@ -32,7 +39,7 @@ if __name__ == "__main__":
 
     inicio = time.time()
 
-    fichero = 'C:\\Users\\Usuario\\Documents\\Programacion-de-Servicios-y-Procesos\\Tema2\\numeros.txt'
+    fichero = 'C:\\Users\\Usuario\\Documents\\Programacion-de-Servicios-y-Procesos\\Tema2\\Boletin1\\numeros2.txt'
 
     queue = Queue()
 
