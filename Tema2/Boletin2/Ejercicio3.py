@@ -78,7 +78,6 @@ if __name__ == '__main__':
         resultados = pool.map(obtenerNotaMaxima, (fichero_medias,))
 
     alumno_max, max_nota = resultados[0]
-    
     print(f"Alumno con la nota máxima: {alumno_max} con una nota de {max_nota}")
 
     fin = time.time()
